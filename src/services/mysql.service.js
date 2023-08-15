@@ -1,19 +1,9 @@
-const {mysqlConnection} = require('../database/mysql.database');
+const { mysqlConnection } = require('../database/mysql.database');
+const mysql = require("../helpers/mysql.promisify")
 
 async function runQuery(query) {    
     try{
-        console.log({
-            query
-        })
-        const rows = await new Promise(async(resolve, reject) => {
-            const getRows = mysqlConnection.query(query, (err, rows) => {
-                if(err) reject([]);
-                resolve(rows);  
-            });
-            await mysqlConnection.query(query, getRows);
-        })
-
-        return rows;  
+        return mysql.query(query);
     }catch(error){
         console.log(error);
         throw new Error ("Error in connection database");   
