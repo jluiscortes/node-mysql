@@ -1,55 +1,35 @@
 const { mysqlConnection } = require('../database/mysql.database');
-const mysql = require("../helpers/mysql.promisify")
+const db = require("../helpers/mysql.promisify")
 
 async function runQuery(query) {    
     try{
-        const data = await mysql(query);
-        return data;
+        return await db.execute(query);
     }catch(error){
         console.log(error);
         throw new Error ("Error in connection database");   
-    }finally{
-        mysqlConnection.end();
-    } 
+    }
 }
 
 async function getShemaWithLimitOffset(schema,limit,offset) {    
     try{
-        return new Promise(async(resolve, reject) => {
-            const query  = `SELECT * FROM ${schema} LIMIT ${limit} OFFSET ${offset}`;
-            const getRows = mysqlConnection.query(query, (err, rows) => {
-                if(err) reject(err);
-                resolve(rows);  
-            });
-            await mysqlConnection.query(query, getRows);
-        })
-
+        const query  = `SELECT * FROM ${schema} LIMIT ${limit} OFFSET ${offset}`;
+        const data = await db.execute(query);
+        return data;
     }catch(error){
         console.log(error);
         throw new Error (error);   
-    }finally{
-        mysqlConnection.end();
-    } 
+    }
 }
 
-async function getSchemaWithWhereCondition(schema,limit,offset,whereCondition) {    
+async function getSchemaWithWhereCondition(schema,field,condition) {    
     try{
-        const rows = await new Promise(async(resolve, reject) => {
-            const query = `SELECT * FROM ${schema} WHERE ${whereCondition} LIMIT ${limit} OFFSET ${offset}`;
-            const getRows = mysqlConnection.query(query, (err, rows) => {
-                if(err) reject([]);
-                resolve(rows);  
-            });
-            await mysqlConnection.query(query, getRows);
-        })
-
-        return rows;  
+        const query = `SELECT * FROM ${schema} WHERE ${field} = ${condition}`;
+        const data = await db.execute(query);
+        return data;  
     }catch(error){
         console.log(error);
         throw new Error ("Error in connection database");   
-    }finally{
-        mysqlConnection.end();
-    } 
+    }
 }
 async function addSchemaRow(schema, data){
     try{

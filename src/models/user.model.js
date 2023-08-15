@@ -1,12 +1,13 @@
+const {formatISODateToReadable} = require('../utils/date')
 class User {
-    constructor(id, name, email, password, role, createdAt, updatedAt) {  
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.role = role;
-        this.password = password;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+    constructor(field) {  
+        this.id = field.id;
+        this.name = field.name;
+        this.email = field.email;
+        this.role = field.role;
+        this.password = field.password;
+        this.createdAt = formatISODateToReadable(field.createdAt);
+        this.updatedAt = formatISODateToReadable(field.updatedAt);
     }
 }
 
