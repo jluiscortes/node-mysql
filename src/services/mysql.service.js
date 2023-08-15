@@ -3,6 +3,9 @@ const {mysqlConnection} = require('../database/mysql.database');
 
 async function runQuery(query) {    
     try{
+        console.log({
+            query
+        })
         const rows = await new Promise(async(resolve, reject) => {
             const getRows = mysqlConnection.query(query, (err, rows) => {
                 if(err) reject([]);
