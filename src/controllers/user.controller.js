@@ -1,5 +1,6 @@
 const {runQuery} = require("../services/mysql.service")
 const Message = require("../models/message.model");
+
 async function getUsers(req, res) {
     try{
         const query = `SELECT * FROM users`;

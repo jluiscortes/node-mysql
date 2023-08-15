@@ -7,9 +7,6 @@ class Message{
     send(res){
         res.status(this.status).json(this);
     }
-
-
-
 }
 
 module.exports = Message;
