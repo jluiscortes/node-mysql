@@ -3,7 +3,8 @@ const mysql = require("../helpers/mysql.promisify")
 
 async function runQuery(query) {    
     try{
-        return mysql.query(query);
+        const data = await mysql(query);
+        return data;
     }catch(error){
         console.log(error);
         throw new Error ("Error in connection database");   
