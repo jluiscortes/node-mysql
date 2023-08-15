@@ -1,27 +1,21 @@
 const { mysqlConnection } = require('../database/mysql.database');
+const util = require('util');
+const { createResponseObject } = require("../helpers/routes.helper");
 
+const Async_mysql = {
+    query: util.promisify(mysqlConnection.query).bind(mysqlConnection),
+};
 
 async function runQuery(query, params) {
     try {
-        return new Promise(async (resolve, reject) => {
-            mysqlConnection.query(query, [params], (err, rows) => {
-                if (err) {
-                    resolve({
-                        status: 500,
-                        menssage: "data not found",
-                        data: []
-                    })
-                    return
-                }
-                resolve({
-                    status: 200,
-                    menssage: "data found",
-                    data: rows[0]
-                })
-            });
-        });
+        const results = await Async_mysql.query(query, [params]);
+        if (results.length > 0) {
+            return createResponseObject(200, 'data found', results[0]);
+        } else {
+            return createResponseObject(500, 'no data found', null);
+        }
     } catch (error) {
-        throw new Error("Error in connection database");
+        return createResponseObject(500, error.message, null);
     }
 }
 
