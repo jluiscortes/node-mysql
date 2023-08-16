@@ -1,1 +1,30 @@
+### Find all users
 GET http://localhost:8080/users
+
+### Find user by id
+GET http://localhost:8080/user/6
+
+### Create user
+POST http://localhost:8080/user
+Content-Type: application/json
+
+{
+    "name":"Juan",
+    "email":"resources@gmail.com",
+    "role":"01",
+    "password":"secret"
+}
+### Update user
+PUT http://localhost:8080/user/1
+Content-Type: application/json
+
+{
+    "name":"Juan",
+    "email":"canvas@gmail.com",
+    "role":"01",
+    "password":"secret",
+    "createdAt" : "2023-08-15T11:38:49.000Z",
+    "updatedAt" : "2023-08-15T13:00:49.000Z"
+}
+### Delete user
+DELETE http://localhost:8080/user/6
