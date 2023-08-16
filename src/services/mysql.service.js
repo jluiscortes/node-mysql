@@ -1,3 +1,4 @@
+const { func } = require('joi');
 const { mysqlConnection } = require('../database/mysql.database');
 const db = require("../helpers/mysql.promisify")
 
@@ -31,26 +32,48 @@ async function getSchemaWithWhereCondition(schema,field,condition) {
         throw new Error ("Error in connection database");   
     }
 }
-async function addSchemaRow(schema, data){
+async function addSchemaRow(schema, values){
     try{
-        return await new Promise(async(resolve, reject) => {
-            const query = `INSERT INTO ${schema} SET ?`;
-            const getRows = mysqlConnection.query(query, data, (err, rows) => {
-                if(err) reject(error);
-                resolve(rows);  
-            });
-            await mysqlConnection.query(query, getRows);
+        console.log({
+            schema,
+            values
         })
+        const query = `INSERT INTO ${schema} SET ?`;
+        const responseMysql = await db.execute(query,values);
+        return responseMysql;
+    
     }catch(error){
         console.log(error);
         throw new Error ("Error in connection database");   
-    }finally{
-        mysqlConnection.end();
-    } 
+    }
+}
+async function updateSchemaRow(schema, values,id){
+    try{
+        const query = `UPDATE ${schema} SET ? WHERE id = ${id}`;
+        const responseMysql = await db.execute(query,values);
+        return responseMysql;
+    
+    }catch(error){
+        console.log(error);
+        throw new Error ("Error in connection database");   
+    }
+}
+async function deleteSchemaRow(schema, id){
+    try{
+        const query = `DELETE FROM ${schema} WHERE id = ${id}`;
+        const responseMysql = await db.execute(query);
+        return responseMysql;
+    
+    }catch(error){
+        console.log(error);
+        throw new Error ("Error in connection database");   
+    }
 }
 module.exports = {
     runQuery,
     getShemaWithLimitOffset,
     getSchemaWithWhereCondition,
-    addSchemaRow
+    addSchemaRow,
+    updateSchemaRow,
+    deleteSchemaRow
 }
