@@ -47,7 +47,7 @@ class User {
   }
   async all() {
     const rows = await getShemaWithLimitOffset("users", 100, 0);
-    const rowsUsers = rows.map((row) => new Users(row));
+    const rowsUsers = rows.map((row) => new User(row));
     return rowsUsers;
   }
   async findById() {
