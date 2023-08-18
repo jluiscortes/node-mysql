@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const { PORT } = require("../config/environments");
 const user = require("../routes/user.route");
 const compression = require("compression");
 const helmet = require("helmet");
@@ -18,4 +17,4 @@ app.use(user.routes);
 app.use(helperRoutes);
 app.use(generalError);
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+module.exports = app;
